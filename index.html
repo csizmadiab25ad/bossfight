@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-ARENA: OVERDRIVE</title>
+    <title>CYBER-UNDERTALE: DETERMINATION OVERDRIVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         body, html {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #020205;
+            background-color: #000005;
             color: #fff;
-            font-family: 'Consolas', 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         #game-container {
@@ -31,109 +33,147 @@
             display: block;
             width: 100%;
             height: 100%;
-            background: #04040a;
+            background: #020208;
             cursor: crosshair;
         }
 
-        /* MENÜ & MODAL OVERLAY */
+        /* OVERLAY SCREEN BASE */
         .overlay-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(4, 4, 12, 0.92);
-            backdrop-filter: blur(12px);
+            background: rgba(2, 2, 8, 0.93);
+            backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 20;
+            z-index: 50;
             gap: 20px;
         }
 
         h1.title {
-            font-size: 54px;
-            letter-spacing: 6px;
-            color: #00f0ff;
-            text-shadow: 0 0 20px #00f0ff, 0 0 40px #7000ff;
-            margin-bottom: 10px;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #ff0055;
+            text-shadow: 0 0 20px #ff0055, 0 0 40px #7000ff, 0 0 60px #ff0000;
+            margin-bottom: 5px;
+            text-align: center;
             text-transform: uppercase;
         }
 
-        .menu-btn {
-            width: 280px;
+        .subtitle {
+            font-size: 16px;
+            color: #00f0ff;
+            letter-spacing: 6px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px #00f0ff;
+            text-align: center;
+        }
+
+        /* RETRO BUTTONS */
+        .retro-btn {
+            width: 320px;
             padding: 16px 0;
             font-family: inherit;
             font-size: 18px;
             font-weight: bold;
             color: #fff;
-            background: rgba(15, 15, 30, 0.8);
-            border: 2px solid #00f0ff;
-            border-radius: 8px;
+            background: #000;
+            border: 3px solid #ff0055;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .menu-btn:hover {
+        .retro-btn:hover {
+            background: #ff0055;
+            color: #000;
+            box-shadow: 0 0 35px #ff0055;
+            transform: scale(1.05);
+        }
+
+        .retro-btn.tut-btn {
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .retro-btn.tut-btn:hover {
             background: #00f0ff;
             color: #000;
-            box-shadow: 0 0 30px #00f0ff;
-            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 35px #00f0ff;
         }
 
-        .menu-btn.tut-btn {
-            border-color: #7000ff;
-            box-shadow: 0 0 15px rgba(112, 0, 255, 0.2);
-        }
-
-        .menu-btn.tut-btn:hover {
-            background: #7000ff;
-            color: #fff;
-            box-shadow: 0 0 30px #7000ff;
-        }
-
-        /* TUTORIAL MODAL BOX */
+        /* MODAL BOX */
         .modal-box {
-            background: rgba(12, 12, 28, 0.95);
-            border: 2px solid #7000ff;
-            border-radius: 12px;
-            padding: 30px 40px;
-            max-width: 500px;
+            background: #000;
+            border: 3px solid #00f0ff;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 650px;
             width: 90%;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(112, 0, 255, 0.4);
+            text-align: left;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
         .modal-box h2 {
-            color: #7000ff;
+            color: #ffcc00;
             font-size: 24px;
+            text-align: center;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px #7000ff;
+            text-shadow: 0 0 10px #ffcc00;
+            border-bottom: 2px dashed #ffcc00;
+            padding-bottom: 10px;
         }
 
         .controls-list {
             list-style: none;
-            text-align: left;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            font-size: 15px;
-            color: #ddd;
+            font-size: 14px;
+            color: #eee;
+            line-height: 1.5;
         }
 
         .controls-list span.key {
             color: #00f0ff;
             font-weight: bold;
             display: inline-block;
-            min-width: 110px;
+            min-width: 120px;
+            background: rgba(0, 240, 255, 0.1);
+            padding: 2px 6px;
+            border: 1px solid #00f0ff;
+            border-radius: 3px;
         }
 
-        /* IN-GAME HUD LAYOUT */
+        .mechanic-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .badge-blue { background: #00e5ff; color: #000; }
+        .badge-orange { background: #ff9100; color: #000; }
+        .badge-red { background: #ff0055; color: #fff; }
+
+        /* HUD LAYOUT */
         #ui-overlay {
             position: absolute;
             top: 0;
@@ -141,111 +181,167 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 10;
+            z-index: 20;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 25px 35px;
+            padding: 20px;
         }
 
-        /* BOSS HP TOP CENTER */
+        /* TOP BOSS HUD */
         #boss-panel {
             align-self: center;
-            width: 50%;
-            max-width: 650px;
-            text-align: center;
-            background: rgba(10, 10, 20, 0.6);
+            width: 90%;
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ff0055;
             padding: 12px 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 0, 85, 0.3);
-            backdrop-filter: blur(8px);
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(ff, 0, 85, 0.4);
+            text-align: center;
         }
 
         #boss-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             letter-spacing: 3px;
+            color: #ff0055;
             margin-bottom: 6px;
+            text-shadow: 0 0 8px #ff0055;
         }
 
-        /* PLAYER HUD BOTTOM LEFT */
+        /* BOTTOM PLAYER HUD */
         .player-hud {
             align-self: flex-start;
-            width: 320px;
+            width: 340px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #00ff66;
+            padding: 14px;
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
             display: flex;
             flex-direction: column;
             gap: 10px;
-            background: rgba(10, 10, 20, 0.65);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            backdrop-filter: blur(8px);
+            pointer-events: auto;
         }
 
         .bar-wrap {
             position: relative;
             width: 100%;
-            height: 20px;
-            background: rgba(5, 5, 15, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            height: 22px;
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
             width: 100%;
-            transition: width 0.08s ease-out;
+            transition: width 0.1s linear;
         }
 
         .bar-text {
             position: absolute;
             top: 0;
             left: 8px;
-            font-size: 11px;
-            line-height: 20px;
+            font-size: 12px;
+            line-height: 22px;
             font-weight: bold;
             color: #fff;
-            text-shadow: 1px 1px 3px #000;
+            text-shadow: 1px 1px 2px #000;
             letter-spacing: 1px;
         }
 
-        /* ZÖLD HP ÉS KÉK ENERGIA */
-        #player-hp { 
-            background: linear-gradient(90deg, #00ff66, #00cc44);
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.5);
-        }
-        
-        #player-energy { 
-            background: linear-gradient(90deg, #00f0ff, #7000ff);
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
-        }
+        #player-hp { background: linear-gradient(90deg, #00ff66, #0cc050); box-shadow: 0 0 10px #00ff66; }
+        #player-energy { background: linear-gradient(90deg, #00f0ff, #7000ff); box-shadow: 0 0 10px #00f0ff; }
+        #boss-hp { background: linear-gradient(90deg, #ff0055, #a00030); box-shadow: 0 0 10px #ff0055; }
 
-        #boss-hp { 
-            background: linear-gradient(90deg, #ff0055, #990033);
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
-        }
-
-        #exit-tut-btn {
+        /* UNDERTALE DIALOGUE BOX */
+        #dialogue-box {
             position: absolute;
-            top: 25px;
-            right: 35px;
+            bottom: 20px;
+            align-self: center;
+            width: 90%;
+            max-width: 750px;
+            background: #000;
+            border: 4px solid #fff;
+            padding: 16px 24px;
+            min-height: 90px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.4;
+            letter-spacing: 1px;
             pointer-events: auto;
-            padding: 10px 20px;
-            background: #ff0055;
-            border: none;
-            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ACT MENU MODAL */
+        #act-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            background: #000;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.6);
+            padding: 20px;
+            border-radius: 6px;
+            z-index: 60;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: auto;
+        }
+
+        #act-menu h3 {
+            color: #ffcc00;
+            font-size: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 8px;
+        }
+
+        .act-opt-btn {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 2px solid #ffcc00;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .act-opt-btn:hover {
+            background: #ffcc00;
+            color: #000;
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        .hud-btn {
+            padding: 8px 16px;
+            background: #ffcc00;
+            color: #000;
             font-weight: bold;
             font-family: inherit;
-            border-radius: 6px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-            display: none;
+            box-shadow: 0 0 10px #ffcc00;
             transition: 0.2s;
         }
 
-        #exit-tut-btn:hover {
-            background: #ff3377;
+        .hud-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 20px #fff;
             transform: scale(1.05);
         }
     </style>
@@ -253,57 +349,164 @@
 <body>
 
     <div id="game-container">
+        <!-- CANVAS -->
         <canvas id="canvas"></canvas>
 
         <!-- MAIN MENU -->
         <div id="main-menu" class="overlay-screen">
-            <h1 class="title">CYBER ARENA</h1>
-            <button class="menu-btn" onclick="startGame(false)">PLAY GAME</button>
-            <button class="menu-btn tut-btn" onclick="openTutorialModal()">INTERACTIVE TUTORIAL</button>
+            <h1 class="title">CYBER-UNDERTALE</h1>
+            <div class="subtitle">DETERMINATION OVERDRIVE</div>
+            <button class="retro-btn" onclick="startGame(false)">JÁTÉK INDÍTÁSA</button>
+            <button class="retro-btn tut-btn" onclick="openTutorialModal()">TUTORIÁL & MECHANIKÁK</button>
         </div>
 
-        <!-- TUTORIAL INSTRUCTION MODAL -->
+        <!-- TUTORIAL MODAL -->
         <div id="tutorial-modal" class="overlay-screen" style="display: none;">
             <div class="modal-box">
-                <h2>GYAKORLÓ MÓD - IRÁNYÍTÁS</h2>
+                <h2>IRÁNYÍTÁS & UNDERTALE MECHANIKÁK</h2>
                 <ul class="controls-list">
-                    <li><span class="key">WASD:</span> Mozgás</li>
-                    <li><span class="key">BAL KATT:</span> Lövés (Plazma)</li>
-                    <li><span class="key">Q:</span> Kard Támadás</li>
-                    <li><span class="key">F:</span> Életerő Gyógyítás (+30 HP)</li>
-                    <li><span class="key">SPACE / SHIFT:</span> Dash (Gyors mozdulat)</li>
-                    <li><span class="key">JOBB KATT / E:</span> Pajzs (Energiát fogyaszt)</li>
+                    <li><span class="key">WASD:</span> Mozgás a csatatéren</li>
+                    <li><span class="key">BAL KATT:</span> Plazma Lövés (Távolsági)</li>
+                    <li><span class="key">Q:</span> Cyber-Kard Csapás (Közeli & Nagy Sebzés)</li>
+                    <li><span class="key">SPACE / SHIFT:</span> Dash / Átlendülés (Sérthetetlenség)</li>
+                    <li><span class="key">JOBB KATT / E:</span> Pajzs (Visszaveri a sima lövedékeket)</li>
+                    <li><span class="key">F:</span> Gyógyítás (+30 HP, 35 Energia ára)</li>
+                    <li><span class="key">C / AKCIÓ GOMB:</span> AKCIÓ (ACT) Menü megnyitása</li>
                 </ul>
-                <button class="menu-btn tut-btn" style="width: 100%;" onclick="startTutorialActual()">MEGÉRTETTEM, MEHET!</button>
+
+                <h3 class="text-yellow-400 font-bold mt-2 text-lg border-b border-yellow-400 pb-1">LÖVEDÉK TÍPUSOK:</h3>
+                <div class="text-sm space-y-2 text-gray-200">
+                    <p><span class="mechanic-badge badge-blue">KÉK LÖVEDÉK</span> Maradj <b>TELJESEN MOZDULATLAN</b>! Ha nem lépsz, nem sebződsz meg!</p>
+                    <p><span class="mechanic-badge badge-orange">NARANCS LÖVEDÉK</span> Maradj <b>FOLYAMATOS MOZGÁSBAN</b>! Ha mész, átmegy rajtad!</p>
+                    <p><span class="mechanic-badge badge-red">PIROS / NORMÁL</span> Kerüld el minden áron vagy használd a Pajzsodat!</p>
+                </div>
+
+                <button class="retro-btn tut-btn" style="width: 100%; margin-top: 15px;" onclick="startTutorialActual()">MEGÉRTETTEM, MEHET A GYAKORLÁS!</button>
             </div>
         </div>
 
-        <!-- GAME HUD -->
+        <!-- IN-GAME HUD -->
         <div id="ui-overlay" style="display: none;">
+            <!-- TOP BOSS HUD -->
             <div id="boss-panel">
-                <div id="boss-title">NEXUS GUARDIAN</div>
+                <div id="boss-title">NEXUS GUARDIAN (GASTER OVERDRIVE)</div>
                 <div class="bar-wrap">
                     <div id="boss-hp" class="bar-fill"></div>
-                    <span class="bar-text" id="boss-bar-label">BOSS HP</span>
+                    <span class="bar-text" id="boss-hp-label">BOSS HP</span>
                 </div>
             </div>
 
-            <div class="player-hud">
-                <div class="bar-wrap">
-                    <div id="player-hp" class="bar-fill"></div>
-                    <span class="bar-text">HEALTH (HP)</span>
-                </div>
-                <div class="bar-wrap">
-                    <div id="player-energy" class="bar-fill"></div>
-                    <span class="bar-text">ENERGY (PAJZS & DASH)</span>
-                </div>
+            <!-- ACT MENU OVERLAY -->
+            <div id="act-menu">
+                <h3>AKCIÓ (ACT) MENÜ</h3>
+                <button class="act-opt-btn" onclick="executeAct('CHECK')">[ ELLENŐRZÉS ] - Gyenge pont keresése</button>
+                <button class="act-opt-btn" onclick="executeAct('TALK')">[ BESZÉD ] - Elmetükrözés (Lassítás)</button>
+                <button class="act-opt-btn" onclick="executeAct('DETERMINATION')">[ ELTÖKÉLTSÉG ] - LÉLEK feltöltése (+HP & AURA)</button>
             </div>
 
-            <button id="exit-tut-btn" onclick="exitToMenu()">MENÜ</button>
+            <!-- UNDERTALE DIALOGUE BOX -->
+            <div id="dialogue-box">
+                <span id="dialogue-text">* Érzed a bűneidet a hátadon kúszni...</span>
+            </div>
+
+            <!-- BOTTOM HUD -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                <div class="player-hud">
+                    <div class="bar-wrap">
+                        <div id="player-hp" class="bar-fill"></div>
+                        <span class="bar-text" id="hp-text">ÉLETERŐ (HP)</span>
+                    </div>
+                    <div class="bar-wrap">
+                        <div id="player-energy" class="bar-fill"></div>
+                        <span class="bar-text" id="energy-text">ENERGIA (DASH & PAJZS)</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; pointer-events: auto;">
+                    <button class="hud-btn" onclick="toggleActMenu()">[C] AKCIÓ (ACT)</button>
+                    <button class="hud-btn" style="background: #ff0055; color: #fff;" onclick="exitToMenu()">MENÜ</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        /* CHIPTUNE AUDIO SYNTHESIZER (Web Audio API) */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playSynthSound(type) {
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'shoot') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.1);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            }
+            else if (type === 'slash') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.12);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                osc.start(now); osc.stop(now + 0.12);
+            }
+            else if (type === 'blaster_charge') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.4);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            }
+            else if (type === 'blaster_fire') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, now);
+                osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now); osc.stop(now + 0.35);
+            }
+            else if (type === 'hit') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.linearRampToValueAtTime(40, now + 0.15);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now); osc.stop(now + 0.15);
+            }
+            else if (type === 'heal') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            }
+            else if (type === 'blip') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(280, now);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.04);
+                osc.start(now); osc.stop(now + 0.04);
+            }
+        }
+
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
@@ -332,41 +535,58 @@
             energy: 100, maxEnergy: 100,
             isShielding: false,
             isDashing: false,
+            isMoving: false,
             dashCooldown: 0,
             attackCooldown: 0,
             shootCooldown: 0,
             healCooldown: 0,
+            actCooldown: 0,
+            invulnTimer: 0,
             angle: 0,
             kills: 0,
-            slashAnim: 0 
+            slashAnim: 0
         };
 
         const boss = {
             x: WIDTH / 2,
-            y: HEIGHT / 2 - 120,
-            radius: 26,
-            hp: 150, maxHp: 150,
-            level: 0,
+            y: HEIGHT / 2 - 140,
+            radius: 32,
+            hp: 250, maxHp: 250,
+            level: 1,
             vx: 0, vy: 0,
             angle: 0,
             state: 'IDLE',
             stateTimer: 0,
             isAlive: true,
             respawnTimer: 0,
-            attackFlash: 0,
-            mainColor: '#cc0022',
-            eyeColor: '#ff0000',
-            glowColor: '#ff0033'
+            mainColor: '#ff0055',
+            glowColor: '#ff0055'
         };
 
         let particles = [];
         let projectiles = [];
         let floatingTexts = [];
         let shockwaves = [];
-        let minions = [];
+        let gasterBlasters = [];
         let afterimages = [];
+        let bones = [];
 
+        /* DIALOGUE SYSTEM */
+        let currentTextTarget = "";
+        let currentTextDisplay = "";
+        let textCharIndex = 0;
+        let textTimer = 0;
+
+        function setDialogueText(text) {
+            currentTextTarget = text;
+            currentTextDisplay = "";
+            textCharIndex = 0;
+            textTimer = 0;
+        }
+
+        /* MENU CONTROL FUNCTIONS */
         function openTutorialModal() {
+            initAudio();
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('tutorial-modal').style.display = 'flex';
         }
@@ -377,17 +597,18 @@
         }
 
         function startGame(tutorial = false) {
+            initAudio();
             isTutorialMode = tutorial;
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('ui-overlay').style.display = 'flex';
 
             if (isTutorialMode) {
-                document.getElementById('exit-tut-btn').style.display = 'block';
                 document.getElementById('boss-title').innerText = "TRAINING DUMMY (BOT)";
-                document.getElementById('boss-title').style.color = "#ff0055";
+                setDialogueText("* GYAKORLÓ MÓD: Próbáld ki az AKCIÓ gombot [C], a Kék/Narancs lövedékeket és a Dashinget!");
             } else {
-                document.getElementById('exit-tut-btn').style.display = 'none';
+                boss.level = 1;
                 updateBossTitle();
+                setDialogueText("* Érzed a bűneidet a hátadon kúszni... A Kibernetikus LÉLEK tüzel!");
             }
 
             inGame = true;
@@ -395,8 +616,7 @@
         }
 
         function updateBossTitle() {
-            document.getElementById('boss-title').innerText = `NEXUS GUARDIAN (LVL ${boss.level})`;
-            document.getElementById('boss-title').style.color = boss.glowColor;
+            document.getElementById('boss-title').innerText = `NEXUS GUARDIAN - GASTER PHASE ${boss.level}`;
         }
 
         function exitToMenu() {
@@ -404,6 +624,7 @@
             document.getElementById('main-menu').style.display = 'flex';
             document.getElementById('ui-overlay').style.display = 'none';
             document.getElementById('tutorial-modal').style.display = 'none';
+            document.getElementById('act-menu').style.display = 'none';
         }
 
         function resetGame() {
@@ -412,12 +633,17 @@
             player.x = WIDTH / 2;
             player.y = HEIGHT / 2 + 150;
             player.kills = 0;
-            boss.level = 0;
-            minions = [];
+            boss.level = 1;
+            
+            projectiles = [];
+            particles = [];
+            gasterBlasters = [];
             afterimages = [];
+            bones = [];
             respawnBoss();
         }
 
+        /* INPUT LISTENERS */
         window.addEventListener('blur', () => {
             for (let k in keys) keys[k] = false;
             mouse.down = false;
@@ -425,11 +651,13 @@
         });
 
         window.addEventListener('keydown', e => {
+            if (!inGame) return;
             keys[e.code] = true;
             if (e.code === 'KeyE') player.isShielding = true;
             if (e.code === 'Space' || e.code === 'ShiftLeft') triggerDash();
             if (e.code === 'KeyQ') attack();
             if (e.code === 'KeyF') triggerHeal();
+            if (e.code === 'KeyC') toggleActMenu();
         });
 
         window.addEventListener('keyup', e => {
@@ -443,6 +671,8 @@
         });
 
         canvas.addEventListener('mousedown', e => {
+            if (!inGame) return;
+            initAudio();
             if (e.button === 0) mouse.down = true;
             if (e.button === 2) player.isShielding = true;
         });
@@ -454,7 +684,41 @@
 
         canvas.addEventListener('contextmenu', e => e.preventDefault());
 
-        function createParticles(x, y, color, count, speed = 4) {
+        /* ACT SYSTEM LOGIC */
+        function toggleActMenu() {
+            const menu = document.getElementById('act-menu');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
+            }
+        }
+
+        function executeAct(type) {
+            document.getElementById('act-menu').style.display = 'none';
+            if (!inGame || player.actCooldown > 0) return;
+
+            player.actCooldown = 60;
+
+            if (type === 'CHECK') {
+                setDialogueText(`* [ELLENŐRZÉS] BOSS HP: ${boss.hp}/${boss.maxHp} | GYENGE PONT FELTÁRVA! +20 ENERGIA!`);
+                player.energy = Math.min(player.maxEnergy, player.energy + 20);
+                playSynthSound('heal');
+            } else if (type === 'TALK') {
+                setDialogueText("* [BESZÉD] Megpróbálsz szót érteni a Boss-al... Meglepődik! Az támadási sebessége lelassult!");
+                boss.stateTimer = -40;
+                playSynthSound('blip');
+            } else if (type === 'DETERMINATION') {
+                setDialogueText("* [ELTÖKÉLTSÉG] Emlékszel, miért küzdesz... A LÉLEK pirosan izzik! (+25 HP & SÉRTHETETLENSÉG)");
+                player.hp = Math.min(player.maxHp, player.hp + 25);
+                player.invulnTimer = 120;
+                playSynthSound('heal');
+                spawnShockwave(player.x, player.y, 100, '#ff0055', 6);
+            }
+        }
+
+        /* PARTICLE & FX HELPERS */
+        function createParticles(x, y, color, count, speed = 5) {
             for (let i = 0; i < count; i++) {
                 const ang = Math.random() * Math.PI * 2;
                 const spd = Math.random() * speed + 1;
@@ -463,91 +727,93 @@
                     vx: Math.cos(ang) * spd,
                     vy: Math.sin(ang) * spd,
                     color, life: 1,
-                    decay: Math.random() * 0.04 + 0.02,
+                    decay: Math.random() * 0.03 + 0.02,
                     size: Math.random() * 4 + 2
                 });
             }
         }
 
-        function spawnShockwave(x, y, maxRadius, color, speed = 3) {
+        function spawnShockwave(x, y, maxRadius, color, speed = 4) {
             shockwaves.push({ x, y, radius: 5, maxRadius, color, speed, alpha: 1 });
         }
 
         function spawnFloatingText(x, y, text, color = '#fff') {
-            floatingTexts.push({ x, y, text, color, alpha: 1, vy: -1.8, scale: 1.5 });
+            floatingTexts.push({ x, y, text, color, alpha: 1, vy: -1.8, scale: 1.4 });
         }
 
         function triggerScreenShake(intensity) {
             screenShake = intensity;
         }
 
+        /* PLAYER ACTION SKILLS */
         function triggerHeal() {
             if (!inGame || player.healCooldown > 0 || player.energy < 35 || player.hp >= player.maxHp) return;
 
             player.energy -= 35;
             player.hp = Math.min(player.maxHp, player.hp + 30);
-            player.healCooldown = 25;
+            player.healCooldown = 30;
 
+            playSynthSound('heal');
             createParticles(player.x, player.y, '#00ff66', 35, 6);
             spawnShockwave(player.x, player.y, 85, '#00ff66', 4);
             spawnFloatingText(player.x, player.y, "+30 HP", "#00ff66");
         }
 
         function triggerShoot() {
-            if (!inGame || player.shootCooldown > 0 || player.energy < 8 || player.isShielding) return;
+            if (!inGame || player.shootCooldown > 0 || player.energy < 7 || player.isShielding) return;
 
-            player.energy -= 8;
-            player.shootCooldown = 11;
+            player.energy -= 7;
+            player.shootCooldown = 9;
 
             const angle = player.angle;
             const muzzleX = player.x + Math.cos(angle) * 26;
             const muzzleY = player.y + Math.sin(angle) * 26;
 
-            createParticles(muzzleX, muzzleY, '#00f0ff', 16, 6);
-            spawnShockwave(muzzleX, muzzleY, 30, '#00f0ff', 5);
-            triggerScreenShake(2);
+            playSynthSound('shoot');
+            createParticles(muzzleX, muzzleY, '#00f0ff', 10, 5);
 
             projectiles.push({
                 x: muzzleX, y: muzzleY,
-                vx: Math.cos(angle) * 17, vy: Math.sin(angle) * 17,
-                radius: 8, color: '#00f0ff', isPlayerBullet: true
+                vx: Math.cos(angle) * 18, vy: Math.sin(angle) * 18,
+                radius: 7, color: '#00f0ff', type: 'STANDARD', isPlayerBullet: true
             });
         }
 
         function triggerDash() {
-            if (!inGame || player.dashCooldown > 0 || player.energy < 25) return;
+            if (!inGame || player.dashCooldown > 0 || player.energy < 22) return;
 
-            player.energy -= 25;
-            player.dashCooldown = 28;
+            player.energy -= 22;
+            player.dashCooldown = 25;
             player.isDashing = true;
 
             const dashAngle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
-            const dashDist = 200;
+            const dashDist = 210;
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 6; i++) {
                 afterimages.push({
-                    x: player.x + Math.cos(dashAngle) * (dashDist * (i / 5)),
-                    y: player.y + Math.sin(dashAngle) * (dashDist * (i / 5)),
-                    angle: player.angle, alpha: 0.6, color: '#7000ff'
+                    x: player.x + Math.cos(dashAngle) * (dashDist * (i / 6)),
+                    y: player.y + Math.sin(dashAngle) * (dashDist * (i / 6)),
+                    angle: player.angle, alpha: 0.7, color: '#ff0055'
                 });
             }
 
-            spawnShockwave(player.x, player.y, 40, '#7000ff', 5);
+            playSynthSound('slash');
+            spawnShockwave(player.x, player.y, 45, '#ff0055', 5);
             player.x += Math.cos(dashAngle) * dashDist;
             player.y += Math.sin(dashAngle) * dashDist;
 
             player.x = Math.max(30, Math.min(WIDTH - 30, player.x));
             player.y = Math.max(30, Math.min(HEIGHT - 30, player.y));
 
-            spawnShockwave(player.x, player.y, 60, '#00f0ff', 5);
-            triggerScreenShake(6);
+            spawnShockwave(player.x, player.y, 65, '#00f0ff', 5);
+            triggerScreenShake(5);
 
-            if (boss.isAlive && Math.hypot(boss.x - player.x, boss.y - player.y) < boss.radius + 45) {
-                damageBoss(35, true);
-                spawnFloatingText(boss.x, boss.y, "DASH CUT!", "#7000ff");
+            if (boss.isAlive && Math.hypot(boss.x - player.x, boss.y - player.y) < boss.radius + 50) {
+                damageBoss(40, true);
+                spawnFloatingText(boss.x, boss.y, "DASH SLASH!", "#ff0055");
             }
 
-            setTimeout(() => player.isDashing = false, 150);
+            setTimeout(() => player.isDashing = false, 160);
         }
 
         function attack() {
@@ -555,90 +821,70 @@
             player.attackCooldown = 12;
             player.slashAnim = 1.0;
 
+            playSynthSound('slash');
             const attackAngle = player.angle;
-            const hitX = player.x + Math.cos(attackAngle) * 55;
-            const hitY = player.y + Math.sin(attackAngle) * 55;
+            const hitX = player.x + Math.cos(attackAngle) * 60;
+            const hitY = player.y + Math.sin(attackAngle) * 60;
 
-            createParticles(hitX, hitY, '#00f0ff', 20, 6);
-            spawnShockwave(hitX, hitY, 55, '#00f0ff', 5);
+            createParticles(hitX, hitY, '#00f0ff', 22, 7);
+            spawnShockwave(hitX, hitY, 60, '#00f0ff', 5);
 
-            if (boss.isAlive && Math.hypot(boss.x - hitX, boss.y - hitY) < boss.radius + 40) {
-                let dmg = 26;
+            if (boss.isAlive && Math.hypot(boss.x - hitX, boss.y - hitY) < boss.radius + 45) {
+                let dmg = 30;
                 let isCrit = Math.random() < 0.35;
                 if (isCrit) dmg *= 1.8;
 
                 damageBoss(Math.floor(dmg), isCrit);
-                triggerScreenShake(5);
-
-                if (!isTutorialMode) {
-                    boss.vx += Math.cos(attackAngle) * 5;
-                    boss.vy += Math.sin(attackAngle) * 5;
-                }
+                triggerScreenShake(6);
             }
-
-            minions.forEach((m, idx) => {
-                if (Math.hypot(m.x - hitX, m.y - hitY) < m.radius + 30) {
-                    m.hp -= 35;
-                    createParticles(m.x, m.y, '#ff0055', 10, 4);
-                    if (m.hp <= 0) minions.splice(idx, 1);
-                }
-            });
         }
 
         function damageBoss(amount, isCrit = false) {
             boss.hp -= amount;
-            spawnFloatingText(boss.x, boss.y, amount, isCrit ? '#ffcc00' : '#ff3366');
-            createParticles(boss.x, boss.y, boss.glowColor, 15, 6);
-            spawnShockwave(boss.x, boss.y, 50, boss.glowColor, 4);
+            playSynthSound('hit');
+            spawnFloatingText(boss.x, boss.y, amount, isCrit ? '#ffcc00' : '#ff0055');
+            createParticles(boss.x, boss.y, boss.glowColor, 18, 7);
 
             if (boss.hp <= 0) {
                 boss.isAlive = false;
-                boss.respawnTimer = isTutorialMode ? 60 : 180;
+                boss.respawnTimer = isTutorialMode ? 80 : 200;
                 player.kills++;
-                createParticles(boss.x, boss.y, boss.glowColor, 140, 14);
-                spawnShockwave(boss.x, boss.y, 160, boss.glowColor, 7);
-                triggerScreenShake(22);
-                spawnFloatingText(boss.x, boss.y, isTutorialMode ? "BOT REBOOTING" : "BOSS DESTROYED!", "#00ffcc");
+                playSynthSound('blaster_fire');
+                createParticles(boss.x, boss.y, boss.glowColor, 150, 16);
+                spawnShockwave(boss.x, boss.y, 180, boss.glowColor, 8);
+                triggerScreenShake(25);
+                setDialogueText(isTutorialMode ? "* A GYAKORLÓ BOT MEGSEMMISÜLT! Újraindulás..." : "* ELTÖKÉLTSÉGED LEGYŐZTE A GASTER GUARDIANT!");
             }
         }
 
         function respawnBoss() {
             if (!isTutorialMode) boss.level++;
 
-            if (isTutorialMode) {
-                boss.radius = 28;
-                boss.maxHp = 200;
-                boss.mainColor = '#2a0006';
-                boss.eyeColor = '#ff0000';
-                boss.glowColor = '#ff0033';
-            } else {
-                boss.radius = Math.min(24 + boss.level * 4, 55);
-                boss.maxHp = 140 + (boss.level - 1) * 160;
-
-                if (boss.level >= 5) {
-                    boss.mainColor = '#1a002a';
-                    boss.eyeColor = '#ffff00';
-                    boss.glowColor = '#ff00ff';
-                } else if (boss.level >= 3) {
-                    boss.mainColor = '#3a0008';
-                    boss.eyeColor = '#ff3300';
-                    boss.glowColor = '#ff0055';
-                } else {
-                    boss.mainColor = '#220004';
-                    boss.eyeColor = '#ff0000';
-                    boss.glowColor = '#ff0033';
-                }
-            }
-
+            boss.maxHp = 220 + (boss.level - 1) * 150;
             boss.hp = boss.maxHp;
             boss.x = WIDTH / 2;
-            boss.y = HEIGHT / 2 - 120;
+            boss.y = HEIGHT / 2 - 140;
             boss.isAlive = true;
             boss.state = 'IDLE';
 
             if (!isTutorialMode) updateBossTitle();
         }
 
+        /* GASTER BLASTER SPANWER */
+        function spawnGasterBlaster(targetX, targetY, angle) {
+            playSynthSound('blaster_charge');
+            gasterBlasters.push({
+                x: targetX - Math.cos(angle) * 400,
+                y: targetY - Math.sin(angle) * 400,
+                targetX, targetY,
+                angle,
+                state: 'CHARGE', // CHARGE -> FIRE -> FADE
+                timer: 0,
+                beamWidth: 0
+            });
+        }
+
+        /* BOSS AI & ATTACK PATTERNS */
         function updateBossAI() {
             if (!boss.isAlive) {
                 boss.respawnTimer--;
@@ -648,118 +894,113 @@
 
             boss.angle = Math.atan2(player.y - boss.y, player.x - boss.x);
 
-            if (Math.random() < 0.6) {
-                const ang = Math.random() * Math.PI * 2;
-                const dist = Math.random() * boss.radius;
-                particles.push({
-                    x: boss.x + Math.cos(ang) * dist,
-                    y: boss.y + Math.sin(ang) * dist,
-                    vx: (Math.random() - 0.5) * 1.5,
-                    vy: -Math.random() * 2 - 0.5,
-                    color: boss.glowColor, life: 0.8, decay: 0.03, size: Math.random() * 3 + 2
-                });
+            if (isTutorialMode) {
+                // Spawn occasional blue/orange bullets for learning
+                boss.stateTimer++;
+                if (boss.stateTimer % 90 === 0) {
+                    let type = Math.random() < 0.5 ? 'BLUE' : 'ORANGE';
+                    projectiles.push({
+                        x: boss.x, y: boss.y,
+                        vx: Math.cos(boss.angle) * 5,
+                        vy: Math.sin(boss.angle) * 5,
+                        radius: 10, color: type === 'BLUE' ? '#00e5ff' : '#ff9100',
+                        type, isPlayerBullet: false
+                    });
+                }
+                return;
             }
-
-            if (isTutorialMode) return;
-
-            boss.x += boss.vx; boss.y += boss.vy;
-            boss.vx *= 0.85; boss.vy *= 0.85;
-
-            boss.x = Math.max(60, Math.min(WIDTH - 60, boss.x));
-            boss.y = Math.max(60, Math.min(HEIGHT - 60, boss.y));
 
             boss.stateTimer++;
 
             if (boss.state === 'IDLE') {
-                boss.x += Math.cos(boss.angle) * (2.2 + boss.level * 0.3);
-                boss.y += Math.sin(boss.angle) * (2.2 + boss.level * 0.3);
+                boss.x += Math.cos(boss.angle) * 1.8;
+                boss.y += Math.sin(boss.angle) * 1.8;
 
-                if (boss.stateTimer > Math.max(35, 65 - boss.level * 5)) {
+                if (boss.stateTimer > 50) {
                     boss.stateTimer = 0;
-                    let actions = ['BULLET_HELL', 'TELEPORT_ATTACK'];
-                    if (boss.level >= 2) actions.push('SPAWN_MINIONS');
-
-                    boss.state = actions[Math.floor(Math.random() * actions.length)];
-                    boss.attackFlash = 25;
-                    spawnShockwave(boss.x, boss.y, 65, '#ffff00', 5);
+                    const attacks = ['GASTER_BEAM', 'BLUE_ORANGE_HELL', 'BONE_BARRAGE'];
+                    boss.state = attacks[Math.floor(Math.random() * attacks.length)];
                 }
-            } 
-            else if (boss.state === 'BULLET_HELL') {
-                if (boss.stateTimer % Math.max(5, 9 - boss.level) === 0) {
-                    const count = 8 + Math.min(boss.level * 2, 12);
-                    for (let i = 0; i < count; i++) {
-                        const ang = (Math.PI * 2 / count) * i + (boss.stateTimer * 0.1);
-                        projectiles.push({
-                            x: boss.x, y: boss.y,
-                            vx: Math.cos(ang) * (5 + boss.level * 0.25),
-                            vy: Math.sin(ang) * (5 + boss.level * 0.25),
-                            radius: 6, color: boss.glowColor,
-                            isPlayerBullet: false
-                        });
-                    }
-                    spawnShockwave(boss.x, boss.y, 40, boss.glowColor, 4);
-                }
-                if (boss.stateTimer > 60) { boss.state = 'IDLE'; boss.stateTimer = 0; }
-            } 
-            else if (boss.state === 'TELEPORT_ATTACK') {
-                if (boss.stateTimer === 15) {
-                    createParticles(boss.x, boss.y, boss.glowColor, 35, 6);
-                    boss.x = player.x - Math.cos(player.angle) * 100;
-                    boss.y = player.y - Math.sin(player.angle) * 100;
-                    createParticles(boss.x, boss.y, boss.glowColor, 35, 6);
-                    spawnShockwave(boss.x, boss.y, 70, boss.glowColor, 6);
-                    
-                    if (Math.hypot(player.x - boss.x, player.y - boss.y) < boss.radius + 45) {
-                        damagePlayer(20 + boss.level * 2);
-                    }
-                }
-                if (boss.stateTimer > 35) { boss.state = 'IDLE'; boss.stateTimer = 0; }
             }
-            else if (boss.state === 'SPAWN_MINIONS') {
+            else if (boss.state === 'GASTER_BEAM') {
+                if (boss.stateTimer === 10) {
+                    spawnGasterBlaster(player.x, player.y, boss.angle);
+                }
+                if (boss.stateTimer > 80) { boss.state = 'IDLE'; boss.stateTimer = 0; }
+            }
+            else if (boss.state === 'BLUE_ORANGE_HELL') {
+                if (boss.stateTimer % 8 === 0) {
+                    let type = (boss.stateTimer / 8) % 2 === 0 ? 'BLUE' : 'ORANGE';
+                    let spread = (Math.random() - 0.5) * 0.8;
+                    projectiles.push({
+                        x: boss.x, y: boss.y,
+                        vx: Math.cos(boss.angle + spread) * 6,
+                        vy: Math.sin(boss.angle + spread) * 6,
+                        radius: 9,
+                        color: type === 'BLUE' ? '#00e5ff' : '#ff9100',
+                        type, isPlayerBullet: false
+                    });
+                }
+                if (boss.stateTimer > 70) { boss.state = 'IDLE'; boss.stateTimer = 0; }
+            }
+            else if (boss.state === 'BONE_BARRAGE') {
                 if (boss.stateTimer === 15) {
-                    spawnShockwave(boss.x, boss.y, 90, boss.glowColor, 6);
-                    let spawnCount = Math.min(1 + Math.floor(boss.level / 2), 4);
-                    for (let i = 0; i < spawnCount; i++) {
-                        let ang = (Math.PI * 2 / spawnCount) * i;
-                        minions.push({
-                            x: boss.x + Math.cos(ang) * 55,
-                            y: boss.y + Math.sin(ang) * 55,
-                            radius: 12, hp: 25, angle: 0
+                    for (let i = -3; i <= 3; i++) {
+                        projectiles.push({
+                            x: boss.x + i * 40, y: boss.y,
+                            vx: 0, vy: 6,
+                            radius: 8, color: '#ffffff',
+                            type: 'STANDARD', isPlayerBullet: false
                         });
                     }
-                    spawnFloatingText(boss.x, boss.y, "MINIONS SPAWNED!", boss.glowColor);
+                    spawnShockwave(boss.x, boss.y, 80, '#ffffff', 5);
                 }
-                if (boss.stateTimer > 30) { boss.state = 'IDLE'; boss.stateTimer = 0; }
+                if (boss.stateTimer > 50) { boss.state = 'IDLE'; boss.stateTimer = 0; }
             }
         }
 
-        function damagePlayer(amount) {
-            if (player.isDashing) return;
+        /* DAMAGE PLAYER WITH UNDERTALE MECHANICS */
+        function damagePlayer(amount, attackType = 'STANDARD') {
+            if (player.isDashing || player.invulnTimer > 0) return;
+
+            // UNDERTALE MECHANICS:
+            // BLUE ATTACK: NO damage if standing still!
+            if (attackType === 'BLUE' && !player.isMoving) {
+                spawnFloatingText(player.x, player.y, "DODGED (STILL)", "#00e5ff");
+                return;
+            }
+            // ORANGE ATTACK: NO damage if moving!
+            if (attackType === 'ORANGE' && player.isMoving) {
+                spawnFloatingText(player.x, player.y, "DODGED (MOVING)", "#ff9100");
+                return;
+            }
 
             if (player.isShielding && player.energy > 0) {
-                player.energy = Math.max(0, player.energy - 20);
-                createParticles(player.x, player.y, '#00ffcc', 18, 6);
-                spawnShockwave(player.x, player.y, 50, '#00ffcc', 5);
-                spawnFloatingText(player.x, player.y, "BLOCK! (-20 EN)", "#00ffcc");
+                player.energy = Math.max(0, player.energy - 18);
+                playSynthSound('blip');
+                createParticles(player.x, player.y, '#00ffcc', 15, 5);
+                spawnFloatingText(player.x, player.y, "BLOCKED!", "#00ffcc");
                 return;
             }
 
             player.hp -= amount;
-            triggerScreenShake(12);
-            createParticles(player.x, player.y, '#ff0055', 18, 6);
-            spawnShockwave(player.x, player.y, 45, '#ff0055', 4);
+            playSynthSound('hit');
+            triggerScreenShake(10);
+            createParticles(player.x, player.y, '#ff0055', 20, 6);
 
             if (player.hp <= 0) {
-                alert(`GAME OVER! Legyőzött Bossok: ${player.kills}`);
+                alert(`A LÉLEK ÖSSZETÖRT! Legyőzött Bossok: ${player.kills}`);
                 exitToMenu();
             }
         }
 
+        /* UPDATE GAME ENGINE (BACKWARD LOOPS FIXING ALL BUGS) */
         function update() {
             if (!inGame) return;
 
-            gridOffset = (gridOffset + 0.5) % 40;
+            gridOffset = (gridOffset + 0.6) % 40;
 
+            // MOVEMENT DETECTION
             let dx = 0, dy = 0;
             if (keys['KeyW']) dy -= 1;
             if (keys['KeyS']) dy += 1;
@@ -767,200 +1008,228 @@
             if (keys['KeyD']) dx += 1;
 
             if (dx !== 0 && dy !== 0) { dx *= 0.7071; dy *= 0.7071; }
+            player.isMoving = (dx !== 0 || dy !== 0);
 
-            let speed = player.isShielding ? player.speed * 0.4 : player.speed;
+            let speed = player.isShielding ? player.speed * 0.45 : player.speed;
             player.x = Math.max(30, Math.min(WIDTH - 30, player.x + dx * speed));
             player.y = Math.max(30, Math.min(HEIGHT - 30, player.y + dy * speed));
 
             player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
 
+            // TIMERS
             if (player.attackCooldown > 0) player.attackCooldown--;
             if (player.shootCooldown > 0) player.shootCooldown--;
             if (player.dashCooldown > 0) player.dashCooldown--;
             if (player.healCooldown > 0) player.healCooldown--;
+            if (player.actCooldown > 0) player.actCooldown--;
+            if (player.invulnTimer > 0) player.invulnTimer--;
             if (player.slashAnim > 0) player.slashAnim -= 0.1;
 
             if (player.energy < player.maxEnergy && !player.isShielding) {
-                player.energy += 0.5;
+                player.energy += 0.45;
             }
 
             if (player.energy <= 0) player.isShielding = false;
             if (mouse.down && !player.isShielding) triggerShoot();
 
+            // TYPING DIALOGUE ANIMATION
+            if (currentTextDisplay.length < currentTextTarget.length) {
+                textTimer++;
+                if (textTimer % 2 === 0) {
+                    currentTextDisplay += currentTextTarget[textCharIndex];
+                    textCharIndex++;
+                    if (textCharIndex % 3 === 0) playSynthSound('blip');
+                    document.getElementById('dialogue-text').innerText = currentTextDisplay;
+                }
+            }
+
             updateBossAI();
 
-            minions.forEach((m, i) => {
-                let mAng = Math.atan2(player.y - m.y, player.x - m.x);
-                m.x += Math.cos(mAng) * 2.6;
-                m.y += Math.sin(mAng) * 2.6;
+            // GASTER BLASTER UPDATE (BACKWARD LOOP)
+            for (let i = gasterBlasters.length - 1; i >= 0; i--) {
+                let gb = gasterBlasters[i];
+                gb.timer++;
 
-                if (Math.hypot(player.x - m.x, player.y - m.y) < player.radius + m.radius) {
-                    damagePlayer(10);
-                    createParticles(m.x, m.y, '#ff0055', 10, 4);
-                    minions.splice(i, 1);
+                // Move towards target
+                gb.x += (gb.targetX - gb.x) * 0.1;
+                gb.y += (gb.targetY - gb.y) * 0.1;
+
+                if (gb.timer > 30 && gb.state === 'CHARGE') {
+                    gb.state = 'FIRE';
+                    playSynthSound('blaster_fire');
+                    triggerScreenShake(14);
                 }
-            });
 
-            projectiles.forEach((p, index) => {
+                if (gb.state === 'FIRE') {
+                    gb.beamWidth = Math.min(50, gb.beamWidth + 8);
+
+                    // Beam collision with player
+                    let beamAngle = gb.angle;
+                    let distToPlayer = Math.hypot(player.x - gb.x, player.y - gb.y);
+                    let angleToPlayer = Math.atan2(player.y - gb.y, player.x - gb.x);
+                    let angleDiff = Math.abs(beamAngle - angleToPlayer);
+
+                    if (angleDiff < 0.25 && distToPlayer < 900) {
+                        damagePlayer(25, 'STANDARD');
+                    }
+
+                    if (gb.timer > 60) gb.state = 'FADE';
+                }
+
+                if (gb.state === 'FADE') {
+                    gb.beamWidth -= 4;
+                    if (gb.beamWidth <= 0) gasterBlasters.splice(i, 1);
+                }
+            }
+
+            // PROJECTILES UPDATE (BACKWARD LOOP)
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                let p = projectiles[i];
                 p.x += p.vx; p.y += p.vy;
 
                 if (p.isPlayerBullet) {
                     if (boss.isAlive && Math.hypot(boss.x - p.x, boss.y - p.y) < boss.radius + p.radius) {
                         damageBoss(25, false);
-                        createParticles(p.x, p.y, '#00f0ff', 12, 5);
-                        projectiles.splice(index, 1);
-                        return;
+                        createParticles(p.x, p.y, '#00f0ff', 10, 5);
+                        projectiles.splice(i, 1);
+                        continue;
                     }
-
-                    minions.forEach((m, mIdx) => {
-                        if (Math.hypot(m.x - p.x, m.y - p.y) < m.radius + p.radius) {
-                            m.hp -= 25;
-                            createParticles(p.x, p.y, '#00f0ff', 8, 4);
-                            projectiles.splice(index, 1);
-                            if (m.hp <= 0) minions.splice(mIdx, 1);
-                        }
-                    });
                 } else {
                     if (Math.hypot(player.x - p.x, player.y - p.y) < player.radius + p.radius) {
-                        if (player.isShielding && player.energy >= 12) {
-                            player.energy -= 12;
-                            p.vx *= -1.5; p.vy *= -1.5;
-                            p.color = '#00ffcc';
-                            p.isPlayerBullet = true;
-                            createParticles(p.x, p.y, '#00ffcc', 14, 5);
-                            spawnShockwave(p.x, p.y, 35, '#00ffcc', 4);
-                            spawnFloatingText(player.x, player.y, "-12 EN", "#00ffcc");
-                        } else {
-                            damagePlayer(12 + boss.level);
-                            createParticles(p.x, p.y, '#ff0055', 10, 4);
-                            projectiles.splice(index, 1);
-                        }
+                        damagePlayer(15, p.type);
+                        projectiles.splice(i, 1);
+                        continue;
                     }
                 }
 
-                if (p.x < 0 || p.x > WIDTH || p.y < 0 || p.y > HEIGHT) projectiles.splice(index, 1);
-            });
+                if (p.x < 0 || p.x > WIDTH || p.y < 0 || p.y > HEIGHT) projectiles.splice(i, 1);
+            }
 
-            afterimages.forEach((img, i) => {
-                img.alpha -= 0.05;
-                if (img.alpha <= 0) afterimages.splice(i, 1);
-            });
+            // PARTICLES & FX CLEANUP (BACKWARD LOOPS)
+            for (let i = afterimages.length - 1; i >= 0; i--) {
+                afterimages[i].alpha -= 0.05;
+                if (afterimages[i].alpha <= 0) afterimages.splice(i, 1);
+            }
 
-            shockwaves.forEach((sw, i) => {
+            for (let i = shockwaves.length - 1; i >= 0; i--) {
+                let sw = shockwaves[i];
                 sw.radius += sw.speed;
                 sw.alpha -= 0.04;
                 if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) shockwaves.splice(i, 1);
-            });
+            }
 
-            particles.forEach((p, i) => {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
                 p.x += p.vx; p.y += p.vy; p.life -= p.decay;
                 if (p.life <= 0) particles.splice(i, 1);
-            });
+            }
 
-            floatingTexts.forEach((t, i) => {
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                let t = floatingTexts[i];
                 t.y += t.vy; t.alpha -= 0.025;
-                if (t.scale > 1) t.scale -= 0.04;
                 if (t.alpha <= 0) floatingTexts.splice(i, 1);
-            });
+            }
 
+            // HUD UPDATES
             document.getElementById('player-hp').style.width = `${Math.max(0, (player.hp / player.maxHp) * 100)}%`;
             document.getElementById('player-energy').style.width = `${Math.max(0, (player.energy / player.maxEnergy) * 100)}%`;
             document.getElementById('boss-hp').style.width = `${Math.max(0, (boss.hp / boss.maxHp) * 100)}%`;
+            document.getElementById('hp-text').innerText = `ÉLETERŐ (HP): ${Math.ceil(player.hp)}/${player.maxHp}`;
+            document.getElementById('energy-text').innerText = `ENERGIA: ${Math.ceil(player.energy)}/${player.maxEnergy}`;
         }
 
+        /* RENDER SYSTEM */
         function draw() {
             ctx.save();
 
             if (screenShake > 0) {
                 ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
-                screenShake *= 0.9;
+                screenShake *= 0.88;
                 if (screenShake < 0.5) screenShake = 0;
             }
 
-            ctx.fillStyle = '#04040a';
+            ctx.fillStyle = '#020208';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            // NEON GRID HÁTTÉR
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
+            // NEON CYBER GRID
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
             ctx.lineWidth = 1;
             for (let x = gridOffset; x < WIDTH; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, HEIGHT); ctx.stroke(); }
             for (let y = gridOffset; y < HEIGHT; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WIDTH, y); ctx.stroke(); }
 
             if (inGame) {
-                // DASH UTÁNHÚZÁSOK (GHOST EFFECT)
+                // DASH AFTERIMAGES
                 afterimages.forEach(img => {
                     ctx.save();
                     ctx.translate(img.x, img.y);
                     ctx.rotate(img.angle);
                     ctx.globalAlpha = img.alpha;
                     ctx.fillStyle = img.color;
-                    ctx.shadowColor = img.color;
-                    ctx.shadowBlur = 15;
                     ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI * 2); ctx.fill();
                     ctx.restore();
                 });
 
+                // SHOCKWAVES
                 shockwaves.forEach(sw => {
                     ctx.save();
                     ctx.globalAlpha = Math.max(0, sw.alpha);
                     ctx.strokeStyle = sw.color;
-                    ctx.shadowColor = sw.color;
-                    ctx.shadowBlur = 15;
                     ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-                    ctx.stroke();
+                    ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2); ctx.stroke();
                     ctx.restore();
                 });
 
+                // GASTER BLASTER BEAMS & SKULLS
+                gasterBlasters.forEach(gb => {
+                    ctx.save();
+                    ctx.translate(gb.x, gb.y);
+                    ctx.rotate(gb.angle);
+
+                    // Red Target Laser Line
+                    if (gb.state === 'CHARGE') {
+                        ctx.strokeStyle = 'rgba(255, 0, 85, 0.6)';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(1200, 0); ctx.stroke();
+                    }
+
+                    // Beam Render
+                    if (gb.state === 'FIRE' || gb.state === 'FADE') {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.shadowColor = '#00f0ff';
+                        ctx.shadowBlur = 25;
+                        ctx.fillRect(0, -gb.beamWidth / 2, 1400, gb.beamWidth);
+                    }
+
+                    // Gaster Skull Shape
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath(); ctx.arc(0, 0, 25, 0, Math.PI * 2); ctx.fill();
+                    ctx.fillStyle = '#000';
+                    ctx.beginPath(); ctx.arc(8, -8, 5, 0, Math.PI * 2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(8, 8, 5, 0, Math.PI * 2); ctx.fill();
+
+                    ctx.restore();
+                });
+
+                // BOSS RENDER
                 if (boss.isAlive) {
                     ctx.save();
                     ctx.translate(boss.x, boss.y);
                     ctx.rotate(boss.angle);
-                    
+
                     ctx.shadowColor = boss.glowColor; ctx.shadowBlur = 30;
                     ctx.fillStyle = boss.mainColor;
                     ctx.beginPath(); ctx.arc(0, 0, boss.radius, 0, Math.PI * 2); ctx.fill();
-                    ctx.strokeStyle = boss.glowColor; ctx.lineWidth = 4; ctx.stroke();
+                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
 
-                    ctx.fillStyle = boss.eyeColor;
-                    ctx.shadowColor = boss.eyeColor;
-                    ctx.shadowBlur = 15;
-                    
-                    let eyeOffset = boss.radius * 0.4;
-                    ctx.beginPath();
-                    ctx.moveTo(eyeOffset, -eyeOffset);
-                    ctx.lineTo(eyeOffset + 12, -eyeOffset + 4);
-                    ctx.lineTo(eyeOffset, -eyeOffset + 8);
-                    ctx.closePath(); ctx.fill();
-
-                    ctx.beginPath();
-                    ctx.moveTo(eyeOffset, eyeOffset);
-                    ctx.lineTo(eyeOffset + 12, eyeOffset - 4);
-                    ctx.lineTo(eyeOffset, eyeOffset - 8);
-                    ctx.closePath(); ctx.fill();
-
-                    if (boss.attackFlash > 0) {
-                        boss.attackFlash--;
-                        ctx.strokeStyle = '#ffff00';
-                        ctx.shadowColor = '#ffff00';
-                        ctx.shadowBlur = 30;
-                        ctx.lineWidth = 4;
-                        ctx.beginPath(); ctx.arc(0, 0, boss.radius + 18, 0, Math.PI * 2); ctx.stroke();
-                    }
+                    // Glowing eyes
+                    ctx.fillStyle = '#ffff00';
+                    ctx.beginPath(); ctx.arc(12, -10, 5, 0, Math.PI * 2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(12, 10, 5, 0, Math.PI * 2); ctx.fill();
 
                     ctx.restore();
                 }
 
-                minions.forEach(m => {
-                    ctx.save();
-                    ctx.translate(m.x, m.y);
-                    ctx.fillStyle = '#ff0055';
-                    ctx.shadowColor = '#ff0055'; ctx.shadowBlur = 15;
-                    ctx.beginPath(); ctx.arc(0, 0, m.radius, 0, Math.PI * 2); ctx.fill();
-                    ctx.restore();
-                });
-
+                // PROJECTILES
                 projectiles.forEach(p => {
                     ctx.save();
                     ctx.fillStyle = p.color;
@@ -969,55 +1238,55 @@
                     ctx.restore();
                 });
 
-                // PLAYER RENDER
+                // PLAYER & UNDERTALE SOUL HEART RENDER
                 ctx.save();
                 ctx.translate(player.x, player.y);
-                ctx.rotate(player.angle);
 
-                // ANIMÁLT PAJZS AURA
+                // Shield Aura
                 if (player.isShielding && player.energy > 0) {
                     ctx.strokeStyle = '#00ffcc'; ctx.lineWidth = 4;
-                    ctx.shadowColor = '#00ffcc'; ctx.shadowBlur = 25;
-                    ctx.beginPath(); ctx.arc(0, 0, player.radius + 15, -Math.PI / 2, Math.PI / 2); ctx.stroke();
-                    
-                    ctx.strokeStyle = 'rgba(0, 255, 204, 0.4)'; ctx.lineWidth = 2;
-                    ctx.beginPath(); ctx.arc(0, 0, player.radius + 20, -Math.PI / 2.2, Math.PI / 2.2); ctx.stroke();
+                    ctx.shadowColor = '#00ffcc'; ctx.shadowBlur = 20;
+                    ctx.beginPath(); ctx.arc(0, 0, player.radius + 14, 0, Math.PI * 2); ctx.stroke();
                 }
 
-                if (player.slashAnim > 0) {
-                    ctx.save();
-                    ctx.strokeStyle = '#00f0ff';
-                    ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 30;
-                    ctx.lineWidth = 8;
-                    ctx.globalAlpha = player.slashAnim;
-
-                    ctx.beginPath(); ctx.arc(10, 0, 60, -Math.PI / 3, Math.PI / 3); ctx.stroke();
-                    ctx.restore();
+                // Invulnerability Aura
+                if (player.invulnTimer > 0) {
+                    ctx.strokeStyle = '#ff0055'; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.arc(0, 0, player.radius + 20, 0, Math.PI * 2); ctx.stroke();
                 }
 
+                // Player Outer Body
                 ctx.fillStyle = '#00f0ff';
-                ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 20;
+                ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 15;
                 ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI * 2); ctx.fill();
-                
-                ctx.fillStyle = '#fff'; ctx.fillRect(10, -3, 16, 6);
+
+                // UNDERTALE RED SOUL HEART IN CENTER
+                ctx.fillStyle = '#ff0000';
+                ctx.shadowColor = '#ff0000'; ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.moveTo(0, 4);
+                ctx.bezierCurveTo(-6, -4, -10, 0, 0, 10);
+                ctx.bezierCurveTo(10, 0, 6, -4, 0, 4);
+                ctx.fill();
+
                 ctx.restore();
             }
 
+            // PARTICLES
             particles.forEach(p => {
                 ctx.save();
                 ctx.globalAlpha = p.life;
                 ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color; ctx.shadowBlur = 10;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
             });
 
+            // FLOATING TEXTS
             floatingTexts.forEach(t => {
                 ctx.save();
                 ctx.globalAlpha = t.alpha;
                 ctx.fillStyle = t.color;
-                ctx.shadowColor = t.color; ctx.shadowBlur = 12;
-                ctx.font = `bold ${Math.floor(16 * t.scale)}px Consolas`;
+                ctx.font = 'bold 16px Courier New';
                 ctx.fillText(t.text, t.x, t.y);
                 ctx.restore();
             });
@@ -1025,6 +1294,7 @@
             ctx.restore();
         }
 
+        /* MAIN LOOP */
         function gameLoop() {
             update();
             draw();
